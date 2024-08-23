@@ -13,7 +13,7 @@ public class Main {
             TareaBot MiloMindBot = new TareaBot();
 
             botsApi.registerBot(MiloMindBot);
-            System.out.println("Milo Mind Bot está funcionando correctamente.");
+            System.out.println("MiloMind Bot está funcionando correctamente.\n");
         }
         catch(Exception ex){
             System.out.println("error"+ex.getMessage());

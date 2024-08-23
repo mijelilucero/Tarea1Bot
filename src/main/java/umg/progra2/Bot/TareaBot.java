@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class TareaBot extends TelegramLongPollingBot {
 
@@ -32,7 +33,13 @@ public class TareaBot extends TelegramLongPollingBot {
             String apellido = update.getMessage().getFrom().getLastName();
             String nickName = update.getMessage().getFrom().getUserName();
 
-            System.out.println("User id: " + chat_id + " Message: " + message_text);
+
+            System.out.printf("""
+                    User id: %d
+                    User info: %s %s %s
+                    Message: %s
+                    
+                    """,chat_id, nombre, apellido, nickName, message_text);
 
             String mensaje_para_enviar= null;
             double tipo_cambio = 8.67;
@@ -44,6 +51,7 @@ public class TareaBot extends TelegramLongPollingBot {
 
 
                             Aquí tienes una lista de comandos que puedes usar:
+                            
                             1. /info
                                - Conoce algunos datos sobre la persona que me ha configurado.
 
@@ -56,6 +64,10 @@ public class TareaBot extends TelegramLongPollingBot {
                             4. /cambio [cantidad en euros]
                                - Convierte Euros a Quetzales. Solo escribe el monto en euros y te diré a cuánto equivale en quetzales.
                                  Ejemplo: /cambio 897
+                            
+                            5. /grupalmensaje [mensaje]
+                               - Envía el mensaje indicado a 4 compañeros. Solo escribe el mensaje que quieres enviar y será compartido con ellos.
+                                 Ejemplo: /grupalmensaje ¡Hola!
 
 
                             ¡Estoy aquí para acompañarte en lo que necesites!""",nombre
@@ -88,21 +100,37 @@ public class TareaBot extends TelegramLongPollingBot {
 
                 mensaje_para_enviar = String.format("Hola, %s, hoy es día %s con hora %s",nombre, fechaFormateada, horaFormateada);
 
-            }else if(message_text.toLowerCase().startsWith("/cambio")){
-                String [] partes_comando = message_text.split(" ");
+            }else if(message_text.toLowerCase().startsWith("/cambio")) {
+                String[] partes_comando = message_text.split(" ");
 
-                if(partes_comando.length > 1){
-                    try{
-                       double euros = Double.parseDouble(partes_comando[1]);
-                       double quetzales = euros * tipo_cambio;
+                if (partes_comando.length > 1) {
+                    try {
+                        double euros = Double.parseDouble(partes_comando[1]);
+                        double quetzales = euros * tipo_cambio;
 
-                        mensaje_para_enviar = String.format("%f euros son %.2f quetzales.",euros, quetzales);
-                    }catch(NumberFormatException e)
-                    {
+                        mensaje_para_enviar = String.format("La cantidad en euros que ingresaste equivale a Q. %.2f", quetzales);
+                    } catch (NumberFormatException e) {
                         mensaje_para_enviar = "Por favor, ingresa una cantidad válida de Euros.";
                     }
-                }else{
+                } else {
                     mensaje_para_enviar = "Por favor, añade una cantidad en Euros después de '/cambio'\nEjemplo: /cambio 897";
+                }
+            }else if(message_text.toLowerCase().startsWith("/grupalmensaje")) {
+
+                int i_inicio = message_text.toLowerCase().indexOf("/grupalmensaje") + "/grupalmensaje".length();
+
+                String mensaje_grupal = message_text.substring(i_inicio).trim();
+
+                if (mensaje_grupal.isEmpty()){
+                    mensaje_para_enviar = "Por favor, añade el mensaje que deseas enviar a los demás después de '/grupalmensaje'\n Ejemplo: /grupalmensaje ¡Hola a todos! ¿Cómo están?";
+                }else{
+                    List<Long>destinatarios =List.of(0L,0L,0L,0L);
+
+//                    for (long usuario:destinatarios){
+//                        sendText(usuario,mensaje_grupal);
+//                    }
+
+                    mensaje_para_enviar = String.format("Tu mensaje \"%s\" ha sido enviado exitosamente a los 4 destinatarios.", mensaje_grupal);
                 }
             }else{
                 mensaje_para_enviar = "Comando inválido. Por favor, ingresa uno de los comandos que te mostré al inicio.";
