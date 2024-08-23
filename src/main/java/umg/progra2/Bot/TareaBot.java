@@ -115,6 +115,7 @@ public class TareaBot extends TelegramLongPollingBot {
                 } else {
                     mensaje_para_enviar = "Por favor, añade una cantidad en Euros después de '/cambio'\nEjemplo: /cambio 897";
                 }
+
             }else if(message_text.toLowerCase().startsWith("/grupalmensaje")) {
 
                 int i_inicio = message_text.toLowerCase().indexOf("/grupalmensaje") + "/grupalmensaje".length();
@@ -124,14 +125,15 @@ public class TareaBot extends TelegramLongPollingBot {
                 if (mensaje_grupal.isEmpty()){
                     mensaje_para_enviar = "Por favor, añade el mensaje que deseas enviar a los demás después de '/grupalmensaje'\n Ejemplo: /grupalmensaje ¡Hola a todos! ¿Cómo están?";
                 }else{
-                    List<Long>destinatarios =List.of(0L,0L,0L,0L);
+                    List<Long>destinatarios =List.of(6828570294L,7161518818L,6688363556L,1262374416L);
 
-//                    for (long usuario:destinatarios){
-//                        sendText(usuario,mensaje_grupal);
-//                    }
+                    for (long usuario:destinatarios){
+                        sendText(usuario,mensaje_grupal);
+                    }
 
                     mensaje_para_enviar = String.format("Tu mensaje \"%s\" ha sido enviado exitosamente a los 4 destinatarios.", mensaje_grupal);
                 }
+
             }else{
                 mensaje_para_enviar = "Comando inválido. Por favor, ingresa uno de los comandos que te mostré al inicio.";
             }
