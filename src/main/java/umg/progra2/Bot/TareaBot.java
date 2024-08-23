@@ -25,22 +25,7 @@ public class TareaBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-//        String nombre = update.getMessage().getFrom().getFirstName();
-//        String apellido = update.getMessage().getFrom().getLastName();
-//        String nickName = update.getMessage().getFrom().getUserName();
-
         if (update.hasMessage() && update.getMessage().hasText()) {
-//            System.out.println("Hola "+nickName+" Tu nombre es: "+nombre+" y tu apellido es: "+apellido);
-//            String message_text = update.getMessage().getText();
-//            long chat_id = update.getMessage().getChatId();
-//
-//            //manejo de mensajes
-//            if (message_text.toLowerCase().equals("hola")){
-//                sendText(chat_id,"🙌Hola "+nombre+" gusto de saludarte😁");
-//            }
-//
-//            System.out.println("User id: " + chat_id + " Message: " + message_text);
-
             String message_text = update.getMessage().getText();
             long chat_id = update.getMessage().getChatId();
             String nombre = update.getMessage().getFrom().getFirstName();
@@ -50,7 +35,7 @@ public class TareaBot extends TelegramLongPollingBot {
             System.out.println("User id: " + chat_id + " Message: " + message_text);
 
             String mensaje_para_enviar= null;
-            Double tipo_cambio = 8.67;
+            double tipo_cambio = 8.67;
 
             if (message_text.equalsIgnoreCase("/start")){
                 mensaje_para_enviar = String.format("""
@@ -111,7 +96,7 @@ public class TareaBot extends TelegramLongPollingBot {
                        double euros = Double.parseDouble(partes_comando[1]);
                        double quetzales = euros * tipo_cambio;
 
-                        mensaje_para_enviar = String.format("%f euros son %.2f quetzales.");
+                        mensaje_para_enviar = String.format("%f euros son %.2f quetzales.",euros, quetzales);
                     }catch(NumberFormatException e)
                     {
                         mensaje_para_enviar = "Por favor, ingresa una cantidad válida de Euros.";
